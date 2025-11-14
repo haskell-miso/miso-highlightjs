@@ -18,7 +18,6 @@ app = (component () update_ viewModel)
       [ Src "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"
       ]
   , styles = [ Href "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" ]
-  , initialAction = Just Init
   }
 #endif
 -----------------------------------------------------------------------------
