@@ -29,6 +29,7 @@ app = (component () update_ viewModel)
 #ifndef WASM
   { scripts =
       [ Src "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"
+      , Src "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"
       ]
   , styles = [ Href "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" ]
   }
@@ -70,6 +71,23 @@ viewModel () =
         [ class_ "language-javascript"
         ]
         [ """ (function () { console.log ('hey'); })() """
+        ]
+      , H.p_ [] [ "Haskell" ]
+      , H.code_
+        [ class_ "language-haskell"
+        ]
+        [ """
+          module Main where
+
+          main :: IO ()
+          main = print (Person "bob" 42)
+
+          data Person
+            = Person
+            { name :: String
+            , age :: Int
+            } deriving (Show, Eq)
+          """
         ]
       ]
     ]
