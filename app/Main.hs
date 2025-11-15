@@ -21,7 +21,7 @@ foreign export javascript "hs_start" main :: IO ()
 main :: IO ()
 main = run (startApp app)
 -----------------------------------------------------------------------------
-data Action = Init
+data Action = Highlight DOMRef
 type Model  = ()
 -----------------------------------------------------------------------------
 app :: App Model Action
@@ -36,9 +36,9 @@ app = (component () update_ viewModel)
 #endif
 -----------------------------------------------------------------------------
 update_ :: Action -> Effect parent model action
-update_ Init = io_ $ void $ do
+update_ (Highlight domRef) = io_ $ void $ do
   hljs <- global ! ("hljs" :: MisoString)
-  hljs # ("highlightAll" :: MisoString) $ ()
+  hljs # ("highlightElement" :: MisoString) $ [domRef]
 -----------------------------------------------------------------------------
 viewModel :: Model -> View Model Action
 viewModel () =
@@ -49,12 +49,12 @@ viewModel () =
     []
     [ "🍜 ", a_ [ href_ "https://github.com/haskell-miso/miso-highlightjs" ] [ "highlight.js" ]
     ]
-  , H.button_ [ H.onClick Init ] [ "Highlight" ]
   , H.pre_
       []
       [ H.p_ [ ] [ "HTML" ]
       , H.code_
         [ class_ "language-html"
+        , onCreatedWith_ Highlight
         ]
         [ """<head><title class=\"foo\">hi</title></head>
           """
@@ -62,6 +62,7 @@ viewModel () =
       , H.p_ [] [ "SQL" ]
       , H.code_
         [ class_ "language-sql"
+        , onCreatedWith_ Highlight
         ]
         [ """ SELECT * FROM person WHERE name LIKE 'J*'
           """
@@ -69,12 +70,14 @@ viewModel () =
       , H.p_ [] [ "JS" ]
       , H.code_
         [ class_ "language-javascript"
+        , onCreatedWith_ Highlight
         ]
         [ """ (function () { console.log ('hey'); })() """
         ]
       , H.p_ [] [ "Haskell" ]
       , H.code_
         [ class_ "language-haskell"
+        , onCreatedWith_ Highlight
         ]
         [ """
           module Main where
